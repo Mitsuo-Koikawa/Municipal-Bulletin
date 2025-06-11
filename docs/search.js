@@ -79,7 +79,9 @@ async function fetchCombinedMarkdown(results) {
 window.addEventListener('DOMContentLoaded', async () => {
   const entries = await loadIndex();
   const downloadBtn = document.getElementById('downloadBtn');
+  const spinner = document.getElementById('spinner');
   document.getElementById('searchBtn').addEventListener('click', async () => {
+    spinner.style.display = 'inline-block';
     const q = document.getElementById('query').value;
     const results = await search(entries, q);
     const container = document.getElementById('results');
@@ -87,6 +89,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     downloadBtn.style.display = 'none';
     if(!results.length) {
       container.textContent = '見つかりませんでした';
+      spinner.style.display = 'none';
       return;
     }
     const limited = results.slice(0, 20);
@@ -97,5 +100,6 @@ window.addEventListener('DOMContentLoaded', async () => {
     container.appendChild(pre);
     downloadBtn.style.display = 'inline';
     downloadBtn.onclick = () => download('results.md', md);
+    spinner.style.display = 'none';
   });
 });
