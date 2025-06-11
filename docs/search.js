@@ -25,42 +25,77 @@ function download(name, content) {
   URL.revokeObjectURL(url);
 }
 
-async function search(entries, query) {
-  query = query.trim();
-  if(!query) return [];
-  return entries.filter(e =>
-    e.article_title.includes(query) ||
-    e.summary.includes(query) ||
-    (e.tags && e.tags.join(' ').includes(query)) ||
-    e.category.includes(query)
-  );
+const SYNONYMS = {
+  '移住': ['移住', '住み替え', '移転'],
+  '空き家': ['空き家', '空家']
+};
+
+function parseQuery(q) {
+  let order = null;
+  if(q.includes('新しい順')) order = 'desc';
+  if(q.includes('古い順')) order = 'asc';
+  q = q.replace(/新しい順.*|古い順.*|の記事.*|を.*$/g, '');
+  const words = q.split(/[\s,とや]+/).filter(Boolean);
+  return { keywords: words, order };
+}
+
+function expandGroups(words) {
+  return words.map(w => SYNONYMS[w] || [w]);
+}
+
+function includesAny(text, arr) {
+  return arr.some(a => text.includes(a));
+}
+
+function entryMatches(entry, groups) {
+  const text = [entry.article_title, entry.summary, entry.tags && entry.tags.join(' '), entry.category].join(' ');
+  return groups.every(g => includesAny(text, g));
+}
+
+function toDate(str) {
+  return new Date(str.replace(/\./g, '-'));
+}
+
+async function search(entries, q) {
+  const {keywords, order} = parseQuery(q.trim());
+  if(!keywords.length) return [];
+  const groups = expandGroups(keywords);
+  let results = entries.filter(e => entryMatches(e, groups));
+  if(order) {
+    results.sort((a,b) => order === 'desc' ? toDate(b.date) - toDate(a.date) : toDate(a.date) - toDate(b.date));
+  }
+  return results;
+}
+
+async function fetchCombinedMarkdown(results) {
+  let out = '';
+  for(const e of results) {
+    const article = await fetchArticle(e);
+    out += createMarkdown(e, article) + '\n\n';
+  }
+  return out.trim();
 }
 
 window.addEventListener('DOMContentLoaded', async () => {
   const entries = await loadIndex();
+  const downloadBtn = document.getElementById('downloadBtn');
   document.getElementById('searchBtn').addEventListener('click', async () => {
     const q = document.getElementById('query').value;
     const results = await search(entries, q);
     const container = document.getElementById('results');
     container.innerHTML = '';
-    for(let i=0; i<Math.min(results.length, 15); i++) {
-      const e = results[i];
-      const div = document.createElement('div');
-      div.className = 'result';
-      div.innerHTML = `<h3>${e.article_title}</h3><p>${e.summary}</p>`;
-      const btn = document.createElement('button');
-      btn.textContent = '表示・ダウンロード';
-      btn.addEventListener('click', async () => {
-        const article = await fetchArticle(e);
-        const md = createMarkdown(e, article);
-        const pre = document.createElement('pre');
-        pre.className = 'markdown';
-        pre.textContent = md;
-        div.appendChild(pre);
-        download(`${e.id}.md`, md);
-      });
-      div.appendChild(btn);
-      container.appendChild(div);
+    downloadBtn.style.display = 'none';
+    if(!results.length) {
+      container.textContent = '見つかりませんでした';
+      return;
     }
+    const limited = results.slice(0, 20);
+    const md = await fetchCombinedMarkdown(limited);
+    const pre = document.createElement('pre');
+    pre.className = 'markdown';
+    pre.textContent = md;
+    container.appendChild(pre);
+    downloadBtn.style.display = 'inline';
+    downloadBtn.onclick = () => download('results.md', md);
   });
 });
