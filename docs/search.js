@@ -81,15 +81,15 @@ window.addEventListener('DOMContentLoaded', async () => {
   const downloadBtn = document.getElementById('downloadBtn');
   const spinner = document.getElementById('spinner');
   document.getElementById('searchBtn').addEventListener('click', async () => {
-    spinner.style.display = 'inline-block';
+    if (spinner) spinner.style.display = 'inline-block';
     const q = document.getElementById('query').value;
     const results = await search(entries, q);
     const container = document.getElementById('results');
     container.innerHTML = '';
-    downloadBtn.style.display = 'none';
+    if (downloadBtn) downloadBtn.style.display = 'none';
     if(!results.length) {
       container.textContent = '見つかりませんでした';
-      spinner.style.display = 'none';
+      if (spinner) spinner.style.display = 'none';
       return;
     }
     const limited = results.slice(0, 20);
@@ -98,8 +98,10 @@ window.addEventListener('DOMContentLoaded', async () => {
     pre.className = 'markdown';
     pre.textContent = md;
     container.appendChild(pre);
-    downloadBtn.style.display = 'inline';
-    downloadBtn.onclick = () => download('results.md', md);
-    spinner.style.display = 'none';
+    if (downloadBtn) {
+      downloadBtn.style.display = 'inline';
+      downloadBtn.onclick = () => download('results.md', md);
+    }
+    if (spinner) spinner.style.display = 'none';
   });
 });
