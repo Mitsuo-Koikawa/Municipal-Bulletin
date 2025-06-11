@@ -1,4 +1,6 @@
 name: Ensure UTF-8 CSV
+permissions:
+  contents: write
 on:
   push:
     paths:
