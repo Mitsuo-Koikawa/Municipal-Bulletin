@@ -19,6 +19,10 @@ python scripts/update_index.py
 
 生成された `docs/index.json` をコミットしてください。
 
+## CSV 文字コードの検証
+
+CSV ファイルのエンコーディングは GitHub Actions (`.github/workflows/ensure-utf8.yml`) により常に検証されます。UTF-8 以外で保存されたファイルは自動的に UTF-8 に変換され、リポジトリへコミットされます。
+
 ## ライセンス
 
 このリポジトリのソースコードは [Apache License 2.0](./LICENSE) の下で公開されています。
