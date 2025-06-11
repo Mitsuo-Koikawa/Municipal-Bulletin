@@ -3,3 +3,4 @@ body { font-family: sans-serif; margin: 2em; }
 .result { border-bottom: 1px solid #ccc; padding: 0.5em 0; }
 .result h3 { margin: 0; }
 .markdown { white-space: pre-wrap; background: #f9f9f9; padding: 1em; }
+#license { position: absolute; top: 1em; right: 1em; }
