@@ -1,4 +1,6 @@
 name: Update index
+permissions:
+  contents: write
 on:
   push:
     paths:
