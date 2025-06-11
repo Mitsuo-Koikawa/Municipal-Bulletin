@@ -27,7 +27,7 @@ async function fetchArticle(entry) {
     throw new Error('Failed to load CSV');
   }
   const parsed = Papa.parse(text, {header:true});
-  const row = parsed.data[entry.row];
+  const row = parsed.data[entry.row - 1];
   return row && row['記事本文'] || '';
 }
 
