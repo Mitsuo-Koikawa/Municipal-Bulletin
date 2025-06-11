@@ -27,11 +27,15 @@ async function fetchArticle(entry) {
   const res = await fetch(apiUrl);
   const info = await res.json();
   let text;
-  if (info.content) {
-    text = atob(info.content.replace(/\n/g, ''));
-  } else if (info.download_url) {
+  if (info.download_url) {
     const raw = await fetch(info.download_url);
-    text = await raw.text();
+    const buf = await raw.arrayBuffer();
+    text = new TextDecoder('utf-8').decode(buf);
+  } else if (info.content) {
+    const binary = atob(info.content.replace(/\n/g, ''));
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    text = new TextDecoder('utf-8').decode(bytes);
   } else {
     throw new Error('Failed to load CSV');
   }
