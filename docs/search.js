@@ -7,12 +7,28 @@ function createMarkdown(entry, article) {
   return `# ${entry.article_title}\n\n- 自治体: ${entry.municipality}\n- 日付: ${entry.date}\n- 号: ${entry.issue_title}\n- カテゴリ: ${entry.category}\n\n${article}`;
 }
 
+function githubApiUrl(path) {
+  const clean = path.replace(/^\.\.\//, '');
+  return 'https://api.github.com/repos/Mitsuo-Koikawa/Municipal-Bulletin/contents/' +
+    clean.split('/').map(encodeURIComponent).join('/') + '?ref=main';
+}
+
 async function fetchArticle(entry) {
-  const res = await fetch(entry.source);
-  const text = await res.text();
+  const apiUrl = githubApiUrl(entry.source);
+  const res = await fetch(apiUrl);
+  const info = await res.json();
+  let text;
+  if (info.content) {
+    text = atob(info.content.replace(/\n/g, ''));
+  } else if (info.download_url) {
+    const raw = await fetch(info.download_url);
+    text = await raw.text();
+  } else {
+    throw new Error('Failed to load CSV');
+  }
   const parsed = Papa.parse(text, {header:true});
   const row = parsed.data[entry.row-1];
-  return row['記事本文'] || '';
+  return row && row['記事本文'] || '';
 }
 
 function download(name, content) {
