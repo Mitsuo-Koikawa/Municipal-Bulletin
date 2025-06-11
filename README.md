@@ -18,3 +18,9 @@ python scripts/update_index.py
 ```
 
 生成された `docs/index.json` をコミットしてください。
+
+## ライセンス
+
+このリポジトリのソースコードは [Apache License 2.0](./LICENSE) の下で公開されています。
+`csv/` フォルダをはじめとするデータは [Creative Commons Attribution 4.0 International](./LICENSE-CC-BY-4.0.txt)（<https://creativecommons.org/licenses/by/4.0/>）ライセンスで提供されます。
+
