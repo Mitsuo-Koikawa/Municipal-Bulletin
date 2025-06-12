@@ -23,6 +23,19 @@ python scripts/update_index.py
 
 CSV ファイルのエンコーディングは GitHub Actions (`.github/workflows/ensure-utf8.yml`) により常に検証されます。UTF-8 以外で保存されたファイルは自動的に UTF-8 に変換され、リポジトリへコミットされます。
 
+## MCPサーバー
+
+`mcp_server/` ディレクトリには、検索インデックス `docs/index.json` を利用して CSV を検索する Azure Functions アプリを用意しています。HTTP エンドポイント `/api/search` にクエリ `q` を渡すと検索結果を JSON で返し、`format=markdown` を指定すると記事本文を含む Markdown を生成します。
+
+デプロイは `.github/workflows/deploy-mcp.yml` を手動実行して行います。実行するには以下の Secrets を設定してください。
+
+- `AZURE_CREDENTIALS` – サービスプリンシパルの認証情報
+- `REGISTRY_LOGIN_SERVER` – コンテナレジストリのログイン サーバー
+- `REGISTRY_USERNAME` – レジストリのユーザー名
+- `REGISTRY_PASSWORD` – レジストリのパスワード
+- `IMAGE_NAME` – イメージ名 (例: contoso.azurecr.io/mcp-server)
+- `FUNCTION_APP_NAME` – デプロイ先の Function App 名
+
 ## ライセンス
 
 このリポジトリのソースコードは [Apache License 2.0](./LICENSE) の下で公開されています。
