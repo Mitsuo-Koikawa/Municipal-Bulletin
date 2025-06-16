@@ -10,7 +10,7 @@
 
 ## インデックスの更新
 
-CSV ファイルが追加・変更されると GitHub Actions (`.github/workflows/update-index.yml`) が実行され、`scripts/update_index.py` を用いてインデックスを再生成します。OpenAI API キー (`OPENAI_API_KEY`) が設定されている場合は LLM を利用して要約とタグ付けを行います。キーがない場合は簡易的な処理で代替します。
+CSV ファイルが追加・変更されると GitHub Actions (`.github/workflows/update-index.yml`) が実行され、`scripts/update_index.py` を用いてインデックスを再生成します。GitHub Models の SLM **Phi4** を利用して要約とキーワード抽出を行い、失敗した場合は簡易的な処理で代替します。
 
 ### 手動で実行する場合
 
