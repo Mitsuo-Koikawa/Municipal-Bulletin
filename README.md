@@ -6,7 +6,7 @@
 
 `docs/` フォルダが GitHub Pages として公開され、`docs/index.html` から検索ページを利用できます。検索ページではインデックス (`docs/index.json`) を読み込み、キーワード検索を行います。記事の本文は必要に応じて CSV から取得し Markdown 形式で表示・ダウンロードできます。
 
-[広報誌検索ページ](https://github.com/Mitsuo-Koikawa/Municipal-Bulletin.git)
+[広報誌検索ページ](https://mitsuo-koikawa.github.io/Municipal-Bulletin)
 
 ## インデックスの更新
 
