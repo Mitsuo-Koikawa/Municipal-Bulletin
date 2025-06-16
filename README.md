@@ -8,9 +8,11 @@
 
 [広報誌検索ページ](https://mitsuo-koikawa.github.io/Municipal-Bulletin)
 
+GitHub アカウントで認証して利用する [高度な検索ページ](https://mitsuo-koikawa.github.io/Municipal-Bulletin/advanced.html) も用意しました。こちらでは入力した文章を GitHub Models の **Phi4** で解析し、インデックスから関連する記事を検索します。検索時のアクセスログは GitHub 上のストレージに30日間保存されます。リポジトリ Collaborator のみ利用可能です。
+
 ## インデックスの更新
 
-CSV ファイルが追加・変更されると GitHub Actions (`.github/workflows/update-index.yml`) が実行され、`scripts/update_index.py` を用いてインデックスを再生成します。GitHub Models の SLM **Phi4** を利用して要約とキーワード抽出を行い、失敗した場合は簡易的な処理で代替します。
+CSV ファイルが追加・変更されても自動では更新されません。以前は `.github/workflows/update-index.yml` が自動実行されていましたが、GitHub Models の SLM **Phi4** を利用する際のトークン消費を抑えるため現在は手動実行としています。インデックスの生成には `scripts/update_index.py` を使用し、失敗した場合は簡易的な処理で代替します。
 
 ### 手動で実行する場合
 
