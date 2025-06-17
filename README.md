@@ -1,5 +1,7 @@
 # Municipal-Bulletin
 
+English version available: [README-en.md](README-en.md)
+
 地方自治体の広報誌データベースです。`csv/` フォルダに CSV 形式で記事データを保管しています。
 
 ## 検索ページ
