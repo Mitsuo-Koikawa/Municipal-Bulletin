@@ -34,10 +34,6 @@ The `mcp_server/` directory contains an Azure Functions app that searches the CS
 Deployment is performed by manually running `.github/workflows/deploy-mcp.yml`. Set the following secrets:
 
 - `AZURE_CREDENTIALS` – service principal credentials
-- `REGISTRY_LOGIN_SERVER` – container registry login server
-- `REGISTRY_USERNAME` – registry username
-- `REGISTRY_PASSWORD` – registry password
-- `IMAGE_NAME` – image name (e.g., contoso.azurecr.io/mcp-server)
 - `FUNCTION_APP_NAME` – name of the target Function App
 
 ## License

@@ -36,10 +36,6 @@ CSV ファイルのエンコーディングは GitHub Actions (`.github/workflow
 デプロイは `.github/workflows/deploy-mcp.yml` を手動実行して行います。実行するには以下の Secrets を設定してください。
 
 - `AZURE_CREDENTIALS` – サービスプリンシパルの認証情報
-- `REGISTRY_LOGIN_SERVER` – コンテナレジストリのログイン サーバー
-- `REGISTRY_USERNAME` – レジストリのユーザー名
-- `REGISTRY_PASSWORD` – レジストリのパスワード
-- `IMAGE_NAME` – イメージ名 (例: contoso.azurecr.io/mcp-server)
 - `FUNCTION_APP_NAME` – デプロイ先の Function App 名
 
 ## ライセンス
